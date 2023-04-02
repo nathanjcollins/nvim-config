@@ -142,8 +142,8 @@ return { -- add gruvbox
 {
     "nvim-treesitter/nvim-treesitter",
     opts = {
-        ensure_installed = {"bash", "help", "html", "javascript", "json", "lua", "markdown", "markdown_inline",
-                            "python", "query", "regex", "tsx", "typescript", "vim", "yaml"}
+        ensure_installed = {"bash", "help", "html", "javascript", "json", "lua", "markdown", "markdown_inline", "query",
+                            "regex", "tsx", "typescript", "vim", "yaml"}
     }
 }, -- since `vim.tbl_deep_extend`, can only merge tables and not lists, the code above
 -- would overwrite `ensure_installed` with the new value.
@@ -152,7 +152,7 @@ return { -- add gruvbox
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
         -- add tsx and treesitter
-        vim.list_extend(opts.ensure_installed, {"tsx", "typescript"})
+        vim.list_extend(opts.ensure_installed, {"tsx", "typescript", "c_sharp", "c", "cpp", "prisma", "vue"})
     end
 }, -- the opts function can also be used to change the default opts:
 {
@@ -178,7 +178,9 @@ return { -- add gruvbox
 {
     "williamboman/mason.nvim",
     opts = {
-        ensure_installed = {"stylua", "shellcheck", "shfmt", "flake8", "omnisharp"}
+        ensure_installed = {"stylua", "omnisharp", "css-lsp", "eslint-lsp", "html-lsp", "json-lsp", "omnisharp",
+                            "prettierd", "prisma-language-server", "tailwindcss-language-server",
+                            "typescript-language-server", "vue-language-server"}
     }
 }, -- Use <tab> for completion and snippets (supertab)
 -- first: disable default <tab> and <s-tab> behavior in LuaSnip
