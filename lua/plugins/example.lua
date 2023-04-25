@@ -151,6 +151,7 @@ return { -- add gruvbox
 {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
+        opts.ignore_install = { 'help' }
         -- add tsx and treesitter
         vim.list_extend(opts.ensure_installed, {"tsx", "typescript", "c_sharp", "c", "cpp", "prisma", "vue"})
     end
@@ -178,7 +179,7 @@ return { -- add gruvbox
 {
     "williamboman/mason.nvim",
     opts = {
-        ensure_installed = {"stylua", "omnisharp", "css-lsp", "eslint-lsp", "html-lsp", "json-lsp", "omnisharp",
+        ensure_installed = {"stylua", "css-lsp", "eslint-lsp", "html-lsp", "json-lsp", "csharp-language-server",
                             "prettierd", "prisma-language-server", "tailwindcss-language-server",
                             "typescript-language-server", "vue-language-server"}
     }
