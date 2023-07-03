@@ -179,7 +179,7 @@ return { -- add gruvbox
 {
     "williamboman/mason.nvim",
     opts = {
-        ensure_installed = {"stylua", "css-lsp", "eslint-lsp", "html-lsp", "json-lsp", "csharp-language-server",
+        ensure_installed = {"stylua", "css-lsp", "html-lsp", "json-lsp", "csharp-language-server",
                             "prettierd", "prisma-language-server", "tailwindcss-language-server",
                             "typescript-language-server", "vue-language-server"}
     }
@@ -230,7 +230,4 @@ return { -- add gruvbox
             end, {"i", "s"})
         })
     end
-}, {"mfussenegger/nvim-dap"}, {
-    "rcarriga/nvim-dap-ui",
-    dependencies = {"mfussenegger/nvim-dap"}
 }}

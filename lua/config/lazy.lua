@@ -13,6 +13,9 @@ require("lazy").setup({
       "LazyVim/LazyVim",
       import = "lazyvim.plugins",
     }, -- import any extras modules here
+    { import = "lazyvim.plugins.extras.test.core" },
+    { import = "lazyvim.plugins.extras.dap.core" },
+    { import = "lazyvim.plugins.extras.lang.tailwind" },
     {
       import = "lazyvim.plugins.extras.lang.typescript",
     },
@@ -22,9 +25,9 @@ require("lazy").setup({
     {
       import = "lazyvim.plugins.extras.ui.mini-animate",
     }, -- import/override with your plugins
-    {
-      import = "lazyvim.plugins.extras.linting.eslint",
-    },
+    -- {
+    --   import = "lazyvim.plugins.extras.linting.eslint",
+    -- },
     {
       import = "lazyvim.plugins.extras.formatting.prettier",
     },
@@ -180,17 +183,4 @@ dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close()
 end
 
-vim.lsp.handlers["textDocument/hover"] = function(_, result, ctx, config)
-  config = config or {}
-  config.focus_id = ctx.method
-  if not (result and result.contents) then
-    return
-  end
-  local markdown_lines = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
-  markdown_lines = vim.lsp.util.trim_empty_lines(markdown_lines)
-  if vim.tbl_isempty(markdown_lines) then
-    return
-  end
-  return vim.lsp.util.open_floating_preview(markdown_lines, "markdown", config)
-end
-
+vim.g.dap_virtual_text = true
