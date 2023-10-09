@@ -96,11 +96,13 @@ require('lazy').setup({
     },
   },
   {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
+    'catppuccin/nvim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'onedark'
+      require("catppuccin").setup({
+        flavour = "frappe"
+      })
+      vim.cmd.colorscheme 'catppuccin'
     end,
   },
   {
@@ -110,7 +112,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'catppuccin',
         component_separators = '|',
         section_separators = '',
       },
@@ -160,7 +162,25 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
   },
-  { 'nvimdev/guard.nvim' },
+  { 'adelarsq/NeoFsharp.vim' },
+  {
+    'simrat39/rust-tools.nvim',
+    dependencies = {
+      'neovim/nvim-lspconfig',
+      'nvim-lua/plenary.nvim',
+      'mfussenegger/nvim-dap'
+    }
+  },
+  { 'norcalli/nvim-colorizer.lua' },
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    }
+  },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -346,8 +366,8 @@ require('nvim-treesitter.configs').setup {
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+vim.keymap.set('n', '<leader>cd', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
+vim.keymap.set('n', '<leader>cq', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
@@ -378,7 +398,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  nmap('<leader>k', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -406,7 +426,7 @@ local servers = {
   -- clangd = {},
   -- gopls = {},
   -- pyright = {},
-  rust_analyzer = {},
+  -- rust_analyzer = {},
   tsserver = {},
   html = { filetypes = { 'html', 'twig', 'hbs' } },
   volar = {},
@@ -415,6 +435,7 @@ local servers = {
   tailwindcss = {},
   cssls = {},
   eslint = {},
+  fsautocomplete = {},
 
   lua_ls = {
     Lua = {
@@ -467,7 +488,7 @@ cmp.setup {
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete {},
+    ['<C-x>'] = cmp.mapping.complete {},
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
@@ -506,15 +527,36 @@ vim.keymap.set('n', '<leader>l', '<Cmd>Lazy<CR>', { desc = 'Show Lazy' })
 vim.keymap.set('n', 'H', '<Cmd>BufferLineCyclePrev<CR>')
 vim.keymap.set('n', 'L', '<Cmd>BufferLineCycleNext<CR>')
 vim.keymap.set('n', '<leader>q', '<Cmd>bdelete<CR>', { desc = 'Close Current Buffer' })
+vim.keymap.set('n', '<leader>Q', '<Cmd>BufferLineCloseOthers<CR>', { desc = 'Close Other Buffers' })
 
-local ft = require('guard.filetype')
+-- local ft = require('guard.filetype')
+--
+-- ft('typescript,javascript,typescriptreact,vue,volar'):fmt('prettierd')
+--
+-- -- Call setup() LAST!
+-- require('guard').setup({
+--   -- the only options for the setup function
+--   fmt_on_save = true,
+--   -- Use lsp if no formatter was defined for this filetype
+--   lsp_as_default_formatter = false,
+-- })
 
-ft('typescript,javascript,typescriptreact,vue,volar'):fmt('prettierd')
+vim.keymap.set('n', '<C-h>', '<C-w>h')
+vim.keymap.set('n', '<C-j>', '<C-w>j')
+vim.keymap.set('n', '<C-k>', '<C-w>k')
+vim.keymap.set('n', '<C-l>', '<C-w>l')
 
--- Call setup() LAST!
-require('guard').setup({
-  -- the only options for the setup function
-  fmt_on_save = true,
-  -- Use lsp if no formatter was defined for this filetype
-  lsp_as_default_formatter = false,
+local rt = require("rust-tools")
+
+rt.setup({
+  server = {
+    on_attach = function(_, bufnr)
+      -- Hover actions
+      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      -- Code action groups
+      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+    end,
+  },
 })
+
+require 'colorizer'.setup()
