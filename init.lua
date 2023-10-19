@@ -95,14 +95,21 @@ require('lazy').setup({
       end,
     },
   },
+  -- {
+  --   'catppuccin/nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     require("catppuccin").setup({
+  --       flavour = "frappe"
+  --     })
+  --     vim.cmd.colorscheme 'catppuccin'
+  --   end,
+  -- },
   {
-    'catppuccin/nvim',
+    'EdenEast/nightfox.nvim',
     priority = 1000,
     config = function()
-      require("catppuccin").setup({
-        flavour = "frappe"
-      })
-      vim.cmd.colorscheme 'catppuccin'
+      vim.cmd.colorscheme 'dayfox'
     end,
   },
   {
@@ -112,7 +119,6 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'catppuccin',
         component_separators = '|',
         section_separators = '',
       },
@@ -183,6 +189,7 @@ require('lazy').setup({
       -- refer to the configuration section below
     }
   },
+  { "jmederosalvarado/roslyn.nvim" },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -432,7 +439,7 @@ local servers = {
   tsserver = {},
   html = { filetypes = { 'html', 'twig', 'hbs' } },
   volar = {},
-  csharp_ls = {},
+  -- csharp_ls = {},
   astro = {},
   tailwindcss = {},
   cssls = {},
@@ -471,6 +478,13 @@ mason_lspconfig.setup_handlers {
     }
   end
 }
+
+require("roslyn").setup({
+  dotnet_cmd = "dotnet",              -- this is the default
+  roslyn_version = "4.8.0-3.23475.7", -- this is the default
+  on_attach = on_attach,
+  capabilities = capabilities
+})
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
