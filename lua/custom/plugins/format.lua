@@ -11,7 +11,7 @@ return {
       },
       formatter_by_ft = {
         cs = formatters.lsp,
-        css = formatters.lsp,
+        css = formatters.prettierd,
         fs = formatters.lsp,
         html = formatters.lsp,
         java = formatters.lsp,
@@ -22,7 +22,7 @@ return {
         prisma = formatters.lsp,
         rust = formatters.lsp,
         scad = formatters.lsp,
-        scss = formatters.lsp,
+        scss = formatters.prettierd,
         sh = formatters.shfmt,
         terraform = formatters.lsp,
         typescript = formatters.prettierd,

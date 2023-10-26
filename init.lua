@@ -1,4 +1,6 @@
 vim.wo.relativenumber = true
+vim.o.guifont = "JetBrainsMono NF:h16"
+
 
 --]]
 -- Set <space> as the leader key
@@ -190,6 +192,12 @@ require('lazy').setup({
     }
   },
   { "jmederosalvarado/roslyn.nvim" },
+  {
+    'ThePrimeagen/harpoon',
+    dependencies = {
+      'nvim-lua/plenary.nvim'
+    },
+  },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -287,6 +295,7 @@ require('telescope').setup {
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
+require("telescope").load_extension('harpoon')
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
@@ -454,6 +463,31 @@ local servers = {
   },
 }
 
+local border = {
+  { '┌', 'FloatBorder' },
+  { '─', 'FloatBorder' },
+  { '┐', 'FloatBorder' },
+  { '│', 'FloatBorder' },
+  { '┘', 'FloatBorder' },
+  { '─', 'FloatBorder' },
+  { '└', 'FloatBorder' },
+  { '│', 'FloatBorder' },
+}
+
+-- Add the border on hover and on signature help popup window
+local handlers = {
+  ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = border }),
+  ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
+}
+
+-- Add border to the diagnostic popup window
+vim.diagnostic.config({
+  virtual_text = {
+    prefix = '■ ', -- Could be '●', '▎', 'x', '■', , 
+  },
+  float = { border = border },
+})
+
 -- Setup neovim lua configuration
 require('neodev').setup()
 
@@ -475,6 +509,7 @@ mason_lspconfig.setup_handlers {
       on_attach = on_attach,
       settings = servers[server_name],
       filetypes = (servers[server_name] or {}).filetypes,
+      handlers = handlers
     }
   end
 }
@@ -483,7 +518,8 @@ require("roslyn").setup({
   dotnet_cmd = "dotnet",              -- this is the default
   roslyn_version = "4.8.0-3.23475.7", -- this is the default
   on_attach = on_attach,
-  capabilities = capabilities
+  capabilities = capabilities,
+  handlers = handlers
 })
 
 -- [[ Configure nvim-cmp ]]
@@ -545,18 +581,6 @@ vim.keymap.set('n', 'L', '<Cmd>BufferLineCycleNext<CR>')
 vim.keymap.set('n', '<leader>q', '<Cmd>bdelete<CR>', { desc = 'Close Current Buffer' })
 vim.keymap.set('n', '<leader>Q', '<Cmd>BufferLineCloseOthers<CR>', { desc = 'Close Other Buffers' })
 
--- local ft = require('guard.filetype')
---
--- ft('typescript,javascript,typescriptreact,vue,volar'):fmt('prettierd')
---
--- -- Call setup() LAST!
--- require('guard').setup({
---   -- the only options for the setup function
---   fmt_on_save = true,
---   -- Use lsp if no formatter was defined for this filetype
---   lsp_as_default_formatter = false,
--- })
-
 vim.keymap.set('n', '<C-h>', '<C-w>h')
 vim.keymap.set('n', '<C-j>', '<C-w>j')
 vim.keymap.set('n', '<C-k>', '<C-w>k')
@@ -576,3 +600,16 @@ rt.setup({
 })
 
 require 'colorizer'.setup()
+
+--harpoon
+vim.keymap.set('n', '<leader>h', '<Cmd>lua require("harpoon.ui").toggle_quick_menu()<CR>', { desc = 'Toggle Harpoon' })
+vim.keymap.set('n', '<leader>H', '<Cmd>lua require("harpoon.mark").add_file()<CR>', { desc = 'Add Open File To Harpoon' })
+vim.keymap.set('n', '1', '<Cmd>lua require("harpoon.ui").nav_file(1)<CR>', { desc = 'Open File 1' })
+vim.keymap.set('n', '2', '<Cmd>lua require("harpoon.ui").nav_file(2)<CR>', { desc = 'Open File 2' })
+vim.keymap.set('n', '3', '<Cmd>lua require("harpoon.ui").nav_file(3)<CR>', { desc = 'Open File 3' })
+vim.keymap.set('n', '4', '<Cmd>lua require("harpoon.ui").nav_file(4)<CR>', { desc = 'Open File 4' })
+vim.keymap.set('n', '5', '<Cmd>lua require("harpoon.ui").nav_file(5)<CR>', { desc = 'Open File 5' })
+vim.keymap.set('n', '6', '<Cmd>lua require("harpoon.ui").nav_file(6)<CR>', { desc = 'Open File 6' })
+vim.keymap.set('n', '7', '<Cmd>lua require("harpoon.ui").nav_file(7)<CR>', { desc = 'Open File 7' })
+vim.keymap.set('n', '8', '<Cmd>lua require("harpoon.ui").nav_file(8)<CR>', { desc = 'Open File 8' })
+vim.keymap.set('n', '9', '<Cmd>lua require("harpoon.ui").nav_file(9)<CR>', { desc = 'Open File 9' })
