@@ -1,6 +1,5 @@
 vim.wo.relativenumber = true
-vim.o.guifont = "JetBrainsMono NF:h16"
-
+vim.o.guifont = 'JetBrainsMono NF:h16'
 
 --]]
 -- Set <space> as the leader key
@@ -52,7 +51,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
+      { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -76,7 +75,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -90,8 +89,7 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
-          { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
         vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
       end,
@@ -130,13 +128,13 @@ require('lazy').setup({
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
-    main = "ibl",
+    main = 'ibl',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
     opts = {
       indent = {
         char = '┊',
-      }
+      },
     },
   },
 
@@ -178,24 +176,24 @@ require('lazy').setup({
     dependencies = {
       'neovim/nvim-lspconfig',
       'nvim-lua/plenary.nvim',
-      'mfussenegger/nvim-dap'
-    }
+      'mfussenegger/nvim-dap',
+    },
   },
   { 'norcalli/nvim-colorizer.lua' },
   {
-    "folke/todo-comments.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    'folke/todo-comments.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
     opts = {
       -- your configuration comes here
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
-    }
+    },
   },
   -- { "jmederosalvarado/roslyn.nvim" },
   {
     'ThePrimeagen/harpoon',
     dependencies = {
-      'nvim-lua/plenary.nvim'
+      'nvim-lua/plenary.nvim',
     },
   },
 
@@ -280,9 +278,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
   defaults = {
-    sorting_strategy = "ascending", -- display results top->bottom
+    sorting_strategy = 'ascending', -- display results top->bottom
     layout_config = {
-      prompt_position = "top"       -- search bar at the top
+      prompt_position = 'top', -- search bar at the top
     },
     mappings = {
       i = {
@@ -295,7 +293,7 @@ require('telescope').setup {
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
-require("telescope").load_extension('harpoon')
+require('telescope').load_extension 'harpoon'
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
@@ -310,6 +308,7 @@ end, { desc = '[/] Fuzzily search in current buffer' })
 
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>f', require('telescope.builtin').find_files, { desc = 'Search [F]iles' })
+
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
@@ -481,12 +480,12 @@ local handlers = {
 }
 
 -- Add border to the diagnostic popup window
-vim.diagnostic.config({
+vim.diagnostic.config {
   virtual_text = {
     prefix = '■ ', -- Could be '●', '▎', 'x', '■', , 
   },
   float = { border = border },
-})
+}
 
 -- Setup neovim lua configuration
 require('neodev').setup()
@@ -509,9 +508,9 @@ mason_lspconfig.setup_handlers {
       on_attach = on_attach,
       settings = servers[server_name],
       filetypes = (servers[server_name] or {}).filetypes,
-      handlers = handlers
+      handlers = handlers,
     }
-  end
+  end,
 }
 
 -- require("roslyn").setup({
@@ -572,7 +571,8 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
-vim.keymap.set('n', '<leader>e', '<Cmd>Neotree position=float reveal toggle<CR>', { desc = 'Toggle Neotree' })
+-- vim.keymap.set('n', '<leader>e', '<Cmd>Neotree position=float reveal toggle<CR>', { desc = 'Toggle Neotree' })
+vim.keymap.set('n', '<leader>e', ':lua MiniFiles.open(vim.fn.expand("%"))<CR>', { desc = 'Search [F]iles' })
 vim.keymap.set('n', '<leader>m', '<Cmd>Mason<CR>', { desc = 'Show [M]ason' })
 vim.keymap.set('n', '<leader>gg', '<Cmd>LazyGit<CR>', { desc = 'Show LazyGit' })
 vim.keymap.set('n', '<leader>l', '<Cmd>Lazy<CR>', { desc = 'Show Lazy' })
@@ -580,26 +580,27 @@ vim.keymap.set('n', 'H', '<Cmd>BufferLineCyclePrev<CR>')
 vim.keymap.set('n', 'L', '<Cmd>BufferLineCycleNext<CR>')
 vim.keymap.set('n', '<leader>q', '<Cmd>bdelete<CR>', { desc = 'Close Current Buffer' })
 vim.keymap.set('n', '<leader>Q', '<Cmd>BufferLineCloseOthers<CR>', { desc = 'Close Other Buffers' })
+vim.keymap.set('n', '<leader>\\', '<Cmd>lua require("dropbar.api").pick()<CR>', { desc = 'Close Other Buffers' })
 
 vim.keymap.set('n', '<C-h>', '<C-w>h')
 vim.keymap.set('n', '<C-j>', '<C-w>j')
 vim.keymap.set('n', '<C-k>', '<C-w>k')
 vim.keymap.set('n', '<C-l>', '<C-w>l')
 
-local rt = require("rust-tools")
+local rt = require 'rust-tools'
 
-rt.setup({
+rt.setup {
   server = {
     on_attach = function(_, bufnr)
       -- Hover actions
-      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      vim.keymap.set('n', '<C-space>', rt.hover_actions.hover_actions, { buffer = bufnr })
       -- Code action groups
-      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+      vim.keymap.set('n', '<Leader>a', rt.code_action_group.code_action_group, { buffer = bufnr })
     end,
   },
-})
+}
 
-require 'colorizer'.setup()
+require('colorizer').setup()
 
 --harpoon
 vim.keymap.set('n', '<leader>h', '<Cmd>lua require("harpoon.ui").toggle_quick_menu()<CR>', { desc = 'Toggle Harpoon' })

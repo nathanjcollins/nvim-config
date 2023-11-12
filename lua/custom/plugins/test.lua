@@ -1,64 +1,64 @@
 return {
-  "nvim-neotest/neotest",
+  'nvim-neotest/neotest',
   dependencies = {
-    "haydenmeade/neotest-jest",
-    "marilari88/neotest-vitest",
+    'haydenmeade/neotest-jest',
+    'marilari88/neotest-vitest',
   },
   keys = {
     {
       '<leader>tt',
       function()
-        require("neotest").run.run(vim.fn.expand("%"))
+        require('neotest').run.run(vim.fn.expand '%')
       end,
-      desc = "Test File",
+      desc = 'Test File',
     },
     {
       '<leader>tr',
       function()
-        require("neotest").run.run()
+        require('neotest').run.run()
       end,
-      desc = "Run Nearest Test",
+      desc = 'Run Nearest Test',
     },
     {
       '<leader>ts',
       function()
-        require("neotest").summary.toggle()
+        require('neotest').summary.toggle()
       end,
-      desc = "Run Last Test",
+      desc = 'Run Last Test',
     },
     {
-      "<leader>tl",
+      '<leader>tl',
       function()
-        require("neotest").run.run_last()
+        require('neotest').run.run_last()
       end,
-      desc = "Run Last Test",
+      desc = 'Run Last Test',
     },
     {
-      "<leader>tL",
+      '<leader>tL',
       function()
-        require("neotest").run.run_last({ strategy = "dap" })
+        require('neotest').run.run_last { strategy = 'dap' }
       end,
-      desc = "Debug Last Test",
+      desc = 'Debug Last Test',
     },
     {
-      "<leader>tw",
+      '<leader>tw',
       "<cmd>lua require('neotest').run.run({ jestCommand = 'jest --watch ' })<cr>",
-      desc = "Run Watch",
+      desc = 'Run Watch',
     },
   },
   config = function()
-    require('neotest').setup({
+    require('neotest').setup {
       adapters = {
-        require('neotest-jest')({
-          jestCommand = "npm test --",
-          jestConfigFile = "custom.jest.config.ts",
+        require 'neotest-jest' {
+          jestCommand = 'npm test --',
+          jestConfigFile = 'custom.jest.config.ts',
           env = { CI = true },
           cwd = function(path)
             return vim.fn.getcwd()
           end,
-        }),
-        require("neotest-vitest")
-      }
-    })
-  end
+        },
+        require 'neotest-vitest',
+      },
+    }
+  end,
 }

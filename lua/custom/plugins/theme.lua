@@ -1,7 +1,7 @@
 return {
-  "f-person/auto-dark-mode.nvim",
+  'f-person/auto-dark-mode.nvim',
   dependencies = {
-    "EdenEast/nightfox.nvim",
+    'EdenEast/nightfox.nvim',
   },
   config = {
     update_interval = 1000,
