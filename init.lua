@@ -1,5 +1,5 @@
 vim.wo.relativenumber = true
-vim.o.guifont = 'JetBrainsMono NF:h16'
+-- vim.o.guifont = 'Monaspace Radon, monaspace:h16'
 
 --]]
 -- Set <space> as the leader key
@@ -33,8 +33,8 @@ require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
   -- Git related plugins
-  'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
+  -- 'tpope/vim-fugitive',
+  -- 'tpope/vim-rhubarb',
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
@@ -75,7 +75,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  -- { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -93,25 +93,10 @@ require('lazy').setup({
         vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
       end,
+      current_line_blame = true,
     },
   },
-  -- {
-  --   'catppuccin/nvim',
-  --   priority = 1000,
-  --   config = function()
-  --     require("catppuccin").setup({
-  --       flavour = "frappe"
-  --     })
-  --     vim.cmd.colorscheme 'catppuccin'
-  --   end,
-  -- },
-  {
-    'EdenEast/nightfox.nvim',
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'dayfox'
-    end,
-  },
+  { 'rebelot/kanagawa.nvim' },
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -170,15 +155,6 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
   },
-  { 'adelarsq/NeoFsharp.vim' },
-  {
-    'simrat39/rust-tools.nvim',
-    dependencies = {
-      'neovim/nvim-lspconfig',
-      'nvim-lua/plenary.nvim',
-      'mfussenegger/nvim-dap',
-    },
-  },
   { 'norcalli/nvim-colorizer.lua' },
   {
     'folke/todo-comments.nvim',
@@ -189,13 +165,19 @@ require('lazy').setup({
       -- refer to the configuration section below
     },
   },
-  -- { "jmederosalvarado/roslyn.nvim" },
+  -- { 'jmederosalvarado/roslyn.nvim' },
   {
     'ThePrimeagen/harpoon',
     dependencies = {
       'nvim-lua/plenary.nvim',
     },
   },
+  -- {
+  --   dir = '~/repos/personal/templates-innit',
+  --   config = function()
+  --     require('templates-innit').setup()
+  --   end,
+  -- },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -321,7 +303,7 @@ require('nvim-treesitter.configs').setup {
   ensure_installed = { 'astro', 'c_sharp', 'lua', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'vue' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-  auto_install = false,
+  auto_install = true,
 
   highlight = { enable = true },
   indent = { enable = true },
@@ -513,13 +495,14 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
--- require("roslyn").setup({
---   dotnet_cmd = "dotnet",              -- this is the default
---   roslyn_version = "4.8.0-3.23475.7", -- this is the default
+-- require('roslyn').setup {
+--   dotnet_cmd = 'dotnet', -- this is the default
+--   roslyn_version = '4.8.0-3.23475.7', -- this is the default
 --   on_attach = on_attach,
 --   capabilities = capabilities,
---   handlers = handlers
--- })
+--   handlers = handlers,
+--   filetypes = { 'cs', 'razor' },
+-- }
 --
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
@@ -566,6 +549,9 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+  },
+  formatting = {
+    format = require('tailwindcss-colorizer-cmp').formatter,
   },
 }
 
