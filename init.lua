@@ -172,6 +172,7 @@ require('lazy').setup({
       'nvim-lua/plenary.nvim',
     },
   },
+  { 'sindrets/diffview.nvim' },
   -- {
   --   dir = '~/repos/personal/templates-innit',
   --   config = function()
