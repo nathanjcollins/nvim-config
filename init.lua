@@ -1,5 +1,6 @@
 vim.wo.relativenumber = true
--- vim.o.guifont = 'Monaspace Radon, monaspace:h16'
+
+vim.opt.scrolloff = 10
 
 --]]
 -- Set <space> as the leader key
@@ -30,11 +31,6 @@ vim.opt.rtp:prepend(lazypath)
 --  You can also configure plugins after the setup call,
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
-  -- NOTE: First, some plugins that don't require any configuration
-
-  -- Git related plugins
-  -- 'tpope/vim-fugitive',
-  -- 'tpope/vim-rhubarb',
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
@@ -51,7 +47,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
+      { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -86,15 +82,13 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
-          { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
         vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
       end,
       current_line_blame = true,
     },
   },
-  { 'rebelot/kanagawa.nvim' },
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -161,13 +155,8 @@ require('lazy').setup({
     },
   },
   -- { 'jmederosalvarado/roslyn.nvim' },
-  {
-    'ThePrimeagen/harpoon',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    },
-  },
   { 'sindrets/diffview.nvim' },
+  { 'numToStr/Comment.nvim', opts = {} },
   -- {
   --   dir = '~/repos/personal/templates-innit',
   --   config = function()
@@ -258,7 +247,7 @@ require('telescope').setup {
   defaults = {
     sorting_strategy = 'ascending', -- display results top->bottom
     layout_config = {
-      prompt_position = 'top',      -- search bar at the top
+      prompt_position = 'top', -- search bar at the top
     },
     mappings = {
       i = {
@@ -291,6 +280,8 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+
+require('colorizer').setup()
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -562,7 +553,6 @@ vim.keymap.set('n', 'H', '<Cmd>BufferLineCyclePrev<CR>')
 vim.keymap.set('n', 'L', '<Cmd>BufferLineCycleNext<CR>')
 vim.keymap.set('n', '<leader>q', '<Cmd>bdelete<CR>', { desc = 'Close Current Buffer' })
 vim.keymap.set('n', '<leader>Q', '<Cmd>BufferLineCloseOthers<CR>', { desc = 'Close Other Buffers' })
-vim.keymap.set('n', '<leader>\\', '<Cmd>lua require("dropbar.api").pick()<CR>', { desc = 'Close Other Buffers' })
 
 vim.keymap.set('n', '<C-h>', '<C-w>h')
 vim.keymap.set('n', '<C-j>', '<C-w>j')
@@ -582,17 +572,5 @@ rt.setup {
   },
 }
 
-require('colorizer').setup()
-
---harpoon
-vim.keymap.set('n', '<leader>h', '<Cmd>lua require("harpoon.ui").toggle_quick_menu()<CR>', { desc = 'Toggle Harpoon' })
-vim.keymap.set('n', '<leader>H', '<Cmd>lua require("harpoon.mark").add_file()<CR>', { desc = 'Add Open File To Harpoon' })
-vim.keymap.set('n', '<leader>1', '<Cmd>lua require("harpoon.ui").nav_file(1)<CR>', { desc = 'Open File 1' })
-vim.keymap.set('n', '<leader>2', '<Cmd>lua require("harpoon.ui").nav_file(2)<CR>', { desc = 'Open File 2' })
-vim.keymap.set('n', '<leader>3', '<Cmd>lua require("harpoon.ui").nav_file(3)<CR>', { desc = 'Open File 3' })
-vim.keymap.set('n', '<leader>4', '<Cmd>lua require("harpoon.ui").nav_file(4)<CR>', { desc = 'Open File 4' })
-vim.keymap.set('n', '<leader>5', '<Cmd>lua require("harpoon.ui").nav_file(5)<CR>', { desc = 'Open File 5' })
-vim.keymap.set('n', '<leader>6', '<Cmd>lua require("harpoon.ui").nav_file(6)<CR>', { desc = 'Open File 6' })
-vim.keymap.set('n', '<leader>7', '<Cmd>lua require("harpoon.ui").nav_file(7)<CR>', { desc = 'Open File 7' })
-vim.keymap.set('n', '<leader>8', '<Cmd>lua require("harpoon.ui").nav_file(8)<CR>', { desc = 'Open File 8' })
-vim.keymap.set('n', '<leader>9', '<Cmd>lua require("harpoon.ui").nav_file(9)<CR>', { desc = 'Open File 9' })
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
