@@ -5,7 +5,7 @@ return {
       {
         callback = function(dir)
           vim.notify('switched to dir: ' .. dir)
-          vim.cmd 'bufdo bd'
+          vim.cmd 'bufdo bd!'
           require('persistence').load()
         end,
       },

@@ -1,3 +1,5 @@
+vim.o.guifont = 'JetBrainsMono Nerd Font:h18'
+
 vim.wo.relativenumber = true
 
 vim.opt.scrolloff = 10
@@ -8,6 +10,8 @@ vim.opt.scrolloff = 10
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+
+vim.g.neovide_input_macos_alt_is_meta = true
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -157,6 +161,8 @@ require('lazy').setup({
   -- { 'jmederosalvarado/roslyn.nvim' },
   { 'sindrets/diffview.nvim' },
   { 'numToStr/Comment.nvim', opts = {} },
+
+  { 'akinsho/toggleterm.nvim', version = '*', config = true },
   -- {
   --   dir = '~/repos/personal/templates-innit',
   --   config = function()
@@ -553,11 +559,27 @@ vim.keymap.set('n', 'H', '<Cmd>BufferLineCyclePrev<CR>')
 vim.keymap.set('n', 'L', '<Cmd>BufferLineCycleNext<CR>')
 vim.keymap.set('n', '<leader>q', '<Cmd>bdelete<CR>', { desc = 'Close Current Buffer' })
 vim.keymap.set('n', '<leader>Q', '<Cmd>BufferLineCloseOthers<CR>', { desc = 'Close Other Buffers' })
+vim.keymap.set('n', '<leader>t1', [[<Cmd>ToggleTerm 1 direction='vertical' size=40<CR>]], { desc = 'Open Terminal 1' })
+vim.keymap.set('n', '<leader>t2', [[<Cmd>ToggleTerm 2 direction='vertical' size=40<CR>]], { desc = 'Open Terminal 2' })
 
 vim.keymap.set('n', '<C-h>', '<C-w>h')
 vim.keymap.set('n', '<C-j>', '<C-w>j')
 vim.keymap.set('n', '<C-k>', '<C-w>k')
 vim.keymap.set('n', '<C-l>', '<C-w>l')
+
+function _G.set_terminal_keymaps()
+  local opts = { buffer = 0 }
+  vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+  vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
+  vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
+  vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
+  vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
+  vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
+  vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
+end
+
+-- if you only want these mappings for toggle term use term://*toggleterm#* instead
+vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 
 local rt = require 'rust-tools'
 
@@ -574,3 +596,16 @@ rt.setup {
 
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+    if client.name ~= 'omnisharp' then
+      return
+    end
+
+    vim.keymap.set('n', 'gd', require('csharp').go_to_definition, { silent = true, nowait = true, noremap = true, desc = 'Go to Definition', buffer = bufnr })
+  end,
+})

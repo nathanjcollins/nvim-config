@@ -1,0 +1,25 @@
+[
+  { "name": "Cap Portal", "path": "/Users/nathancollins/repos/cap/cap-portal" },
+  {
+    "name": "Cap Monorepo (TS)",
+    "path": "/Users/nathancollins/repos/cap/caput-energy"
+  },
+  {
+    "name": "Cap Data Platform",
+    "path": "/Users/nathancollins/repos/cap/cap-fsharp-data-platform"
+  },
+  {
+    "name": "Cap Terraform",
+    "path": "/Users/nathancollins/repos/cap/cap-terraform"
+  },
+  { "name": "Cap Flux", "path": "/Users/nathancollins/repos/cap/caput-flux" },
+  {
+    "name": "Cap Dashboard (v1)",
+    "path": "/Users/nathancollins/repos/cap/cap-nextjs-dashboard-v1"
+  },
+  {
+    "name": "Cap Ops API",
+    "path": "/Users/nathancollins/repos/cap/cap-csharp-ops-platform"
+  },
+  { "name": "Neovim Config", "path": "/Users/nathancollins/.config/nvim" }
+]
