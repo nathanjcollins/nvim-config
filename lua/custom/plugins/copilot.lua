@@ -1,20 +1,29 @@
+-- return {
+--   {
+--     'zbirenbaum/copilot.lua',
+--     cmd = 'Copilot',
+--     event = 'InsertEnter',
+--     config = function()
+--       require('copilot').setup {
+--         suggestion = {
+--           auto_trigger = true,
+--         },
+--       }
+--     end,
+--   },
+--   {
+--     'zbirenbaum/copilot-cmp',
+--     config = function()
+--       require('copilot_cmp').setup()
+--     end,
+--   },
+-- }
+
 return {
-  {
-    'zbirenbaum/copilot.lua',
-    cmd = 'Copilot',
-    event = 'InsertEnter',
-    config = function()
-      require('copilot').setup {
-        suggestion = {
-          auto_trigger = true,
-        },
-      }
-    end,
+  'Exafunction/codeium.nvim',
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+    'hrsh7th/nvim-cmp',
   },
-  {
-    'zbirenbaum/copilot-cmp',
-    config = function()
-      require('copilot_cmp').setup()
-    end,
-  },
+  config = function() end,
 }

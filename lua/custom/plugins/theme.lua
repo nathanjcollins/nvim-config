@@ -1,15 +1,17 @@
 return {
   'f-person/auto-dark-mode.nvim',
   dependencies = {
-    'EdenEast/nightfox.nvim',
+    'ribru17/bamboo.nvim',
   },
   config = {
     update_interval = 1000,
     set_dark_mode = function()
-      vim.cmd.colorscheme 'nightfox'
+      vim.cmd.colorscheme 'bamboo'
+      vim.o.background = 'dark'
     end,
     set_light_mode = function()
-      vim.cmd.colorscheme 'dayfox'
+      vim.cmd.colorscheme 'bamboo'
+      vim.o.background = 'light'
     end,
   },
 }
