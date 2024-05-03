@@ -8,11 +8,11 @@ return {
         javascript = { 'prettierd' },
         json = { 'prettierd' },
         lua = { 'stylua' },
-        markdown = { 'prettierd' },
+        -- markdown = { 'prettierd' },
         scss = { 'prettierd' },
         sh = { 'shfmt' },
         typescript = { 'prettierd' },
-        vue = { 'prettierd' },
+        vue = { 'prettierd', 'rustywind' },
         xml = { 'prettierd' },
       },
       format_on_save = {

@@ -54,7 +54,17 @@ require('lazy').setup({
       { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
+      -- 'folke/neodev.nvim',
+      -- {
+      --   'pmizio/typescript-tools.nvim',
+      --   opts = {
+      --     filetypes = { 'javascript', 'typescript', 'vue' },
+      --     tsserver_plugins = {
+      --       '@vue/typescript-plugin',
+      --     },
+      --   },
+      -- },
+      -- 'folke/neoconf.nvim',
     },
   },
 
@@ -71,28 +81,31 @@ require('lazy').setup({
 
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
+
+      'luckasRanarison/tailwind-tools.nvim',
+      'onsails/lspkind-nvim',
     },
   },
-  {
-    -- Adds git related signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    opts = {
-      -- See `:help gitsigns.txt`
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-      on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
-        vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
-        vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
-      end,
-      current_line_blame = true,
-    },
-  },
+  -- {
+  --   -- Adds git related signs to the gutter, as well as utilities for managing changes
+  --   'lewis6991/gitsigns.nvim',
+  --   opts = {
+  --     -- See `:help gitsigns.txt`
+  --     signs = {
+  --       add = { text = '+' },
+  --       change = { text = '~' },
+  --       delete = { text = '_' },
+  --       topdelete = { text = '‾' },
+  --       changedelete = { text = '~' },
+  --     },
+  --     on_attach = function(bufnr)
+  --       vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
+  --       vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
+  --       vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
+  --     end,
+  --     current_line_blame = true,
+  --   },
+  -- },
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -160,9 +173,16 @@ require('lazy').setup({
   },
   -- { 'jmederosalvarado/roslyn.nvim' },
   { 'sindrets/diffview.nvim' },
-  { 'numToStr/Comment.nvim', opts = {} },
+  -- { 'numToStr/Comment.nvim', opts = {} },
 
   { 'akinsho/toggleterm.nvim', version = '*', config = true },
+  { 'JoosepAlviste/nvim-ts-context-commentstring' },
+  -- {
+  --   dir = '~/repos/personal/f1-nvim',
+  --   config = function()
+  --     require('f1-nvim').setup()
+  --   end,
+  -- },
   -- {
   --   dir = '~/repos/personal/templates-innit',
   --   config = function()
@@ -266,7 +286,6 @@ require('telescope').setup {
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
-require('telescope').load_extension 'harpoon'
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
@@ -414,15 +433,26 @@ end
 --
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
+--
+
+local mason_registry = require 'mason-registry'
+local vue_language_server_path = mason_registry.get_package('vue-language-server'):get_install_path() .. '/node_modules/@vue/language-server'
+
 local servers = {
-  -- clangd = {},
-  -- gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
-  tsserver = {},
+  tsserver = {
+    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+    init_options = {
+      plugins = {
+        {
+          name = '@vue/typescript-plugin',
+          location = vue_language_server_path,
+          languages = { 'vue' },
+        },
+      },
+    },
+  },
   html = { filetypes = { 'html', 'twig', 'hbs' } },
   volar = {},
-  -- csharp_ls = {},
   astro = {},
   tailwindcss = {},
   cssls = {},
@@ -438,14 +468,14 @@ local servers = {
 }
 
 local border = {
-  { '┌', 'FloatBorder' },
-  { '─', 'FloatBorder' },
-  { '┐', 'FloatBorder' },
-  { '│', 'FloatBorder' },
-  { '┘', 'FloatBorder' },
-  { '─', 'FloatBorder' },
-  { '└', 'FloatBorder' },
-  { '│', 'FloatBorder' },
+  { '🭽', 'FloatBorder' },
+  { '▔', 'FloatBorder' },
+  { '🭾', 'FloatBorder' },
+  { '▕', 'FloatBorder' },
+  { '🭿', 'FloatBorder' },
+  { '▁', 'FloatBorder' },
+  { '🭼', 'FloatBorder' },
+  { '▏', 'FloatBorder' },
 }
 
 -- Add the border on hover and on signature help popup window
@@ -469,6 +499,13 @@ require('neodev').setup()
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
+-- require('roslyn').setup {
+--   dotnet_cmd = 'dotnet', -- this is the default
+--   roslyn_version = '4.8.0-3.23475.7', -- this is the default
+--   on_attach = on_attach,
+--   capabilities = capabilities,
+-- }
+
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
 
@@ -484,19 +521,11 @@ mason_lspconfig.setup_handlers {
       settings = servers[server_name],
       filetypes = (servers[server_name] or {}).filetypes,
       handlers = handlers,
+      init_options = (servers[server_name] or {}).init_options,
     }
   end,
 }
 
--- require('roslyn').setup {
---   dotnet_cmd = 'dotnet', -- this is the default
---   roslyn_version = '4.8.0-3.23475.7', -- this is the default
---   on_attach = on_attach,
---   capabilities = capabilities,
---   handlers = handlers,
---   filetypes = { 'cs', 'razor' },
--- }
---
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
 local cmp = require 'cmp'
@@ -544,7 +573,14 @@ cmp.setup {
     { name = 'luasnip' },
   },
   formatting = {
-    format = require('tailwindcss-colorizer-cmp').formatter,
+    format = require('lspkind').cmp_format {
+      before = require('tailwind-tools.cmp').lspkind_format,
+    },
+  },
+  view = {
+    entries = {
+      follow_cursor = true,
+    },
   },
 }
 
@@ -552,6 +588,7 @@ cmp.setup {
 -- vim: ts=2 sts=2 sw=2 et
 -- vim.keymap.set('n', '<leader>e', '<Cmd>Neotree position=float reveal toggle<CR>', { desc = 'Toggle Neotree' })
 vim.keymap.set('n', '<leader>e', ':lua MiniFiles.open(vim.fn.expand("%"))<CR>', { desc = 'Search [F]iles' })
+vim.keymap.set('n', '<leader>-', ':lua MiniDiff.toggle_overlay()<CR>', { desc = 'Toggle Diff Overlay' })
 vim.keymap.set('n', '<leader>m', '<Cmd>Mason<CR>', { desc = 'Show [M]ason' })
 vim.keymap.set('n', '<leader>gg', '<Cmd>LazyGit<CR>', { desc = 'Show LazyGit' })
 vim.keymap.set('n', '<leader>l', '<Cmd>Lazy<CR>', { desc = 'Show Lazy' })
@@ -570,7 +607,6 @@ vim.keymap.set('n', '<C-l>', '<C-w>l')
 function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
   vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-  vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
   vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
   vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
   vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
@@ -580,19 +616,6 @@ end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
 vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
-
-local rt = require 'rust-tools'
-
-rt.setup {
-  server = {
-    on_attach = function(_, bufnr)
-      -- Hover actions
-      vim.keymap.set('n', '<C-space>', rt.hover_actions.hover_actions, { buffer = bufnr })
-      -- Code action groups
-      vim.keymap.set('n', '<Leader>a', rt.code_action_group.code_action_group, { buffer = bufnr })
-    end,
-  },
-}
 
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
