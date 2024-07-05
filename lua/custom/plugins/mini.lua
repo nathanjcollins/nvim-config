@@ -61,17 +61,17 @@ return {
   {
     'echasnovski/mini.surround',
     version = false,
-    config = function()
-      require('mini.surround').setup()
-    end,
+    opts = {},
   },
 
   {
     'echasnovski/mini.diff',
     version = false,
-
-    config = function()
-      require('mini.diff').setup()
-    end,
+    opts = {},
   },
+  { 'echasnovski/mini.indentscope', version = false, opts = {} },
+  { 'echasnovski/mini.notify', version = false, opts = {} },
+  { 'echasnovski/mini.cursorword', version = false, opts = {} },
+  { 'echasnovski/mini.starter', version = false, opts = { autoopen = true } },
+  { 'echasnovski/mini.sessions', version = false, opts = {} },
 }
