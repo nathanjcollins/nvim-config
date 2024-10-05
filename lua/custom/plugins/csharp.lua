@@ -7,6 +7,16 @@ return {
   },
   config = function()
     require('mason').setup()
-    require('csharp').setup()
+    require('csharp').setup {
+      lsp = {
+        omnisharp = {
+          enabled = false,
+        },
+        roslyn = {
+          enabled = true,
+          cmd_path = '~/.local/share/nvim/roslyn/Microsoft.CodeAnalysis.LanguageServer.dll',
+        },
+      },
+    }
   end,
 }

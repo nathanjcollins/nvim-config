@@ -5,6 +5,7 @@ return {
       formatters_by_ft = {
         cs = { 'csharpier' },
         css = { 'prettierd' },
+        fsharp = { 'fantomas' },
         javascript = { 'prettierd' },
         json = { 'prettierd' },
         lua = { 'stylua' },

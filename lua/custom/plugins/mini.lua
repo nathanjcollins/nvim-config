@@ -70,8 +70,9 @@ return {
     opts = {},
   },
   { 'echasnovski/mini.indentscope', version = false, opts = {} },
-  { 'echasnovski/mini.notify', version = false, opts = {} },
+  -- { 'echasnovski/mini.notify', version = false, opts = {} },
   { 'echasnovski/mini.cursorword', version = false, opts = {} },
   { 'echasnovski/mini.starter', version = false, opts = { autoopen = true } },
   { 'echasnovski/mini.sessions', version = false, opts = {} },
+  { 'echasnovski/mini.icons', version = false, opts = {} },
 }

@@ -1,8 +1,17 @@
-vim.o.guifont = 'JetBrainsMono Nerd Font:h18'
+-- vim.o.guifont = 'JetBrainsMono Nerd Font:h18'
 
 vim.wo.relativenumber = true
 
 vim.opt.scrolloff = 10
+vim.opt.listchars = {
+  tab = '»·',
+  eol = '↲',
+  trail = '·',
+  extends = '…',
+  precedes = '…',
+  nbsp = '␣',
+}
+vim.opt.list = true
 
 --]]
 -- Set <space> as the leader key
@@ -114,26 +123,11 @@ require('lazy').setup({
       'onsails/lspkind-nvim',
     },
   },
-  -- {
-  --   -- Adds git related signs to the gutter, as well as utilities for managing changes
-  --   'lewis6991/gitsigns.nvim',
-  --   opts = {
-  --     -- See `:help gitsigns.txt`
-  --     signs = {
-  --       add = { text = '+' },
-  --       change = { text = '~' },
-  --       delete = { text = '_' },
-  --       topdelete = { text = '‾' },
-  --       changedelete = { text = '~' },
-  --     },
-  --     on_attach = function(bufnr)
-  --       vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
-  --       vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
-  --       vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
-  --     end,
-  --     current_line_blame = true,
-  --   },
-  -- },
+  {
+    'christopher-francisco/tmux-status.nvim',
+    lazy = true,
+    opts = {},
+  },
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -149,14 +143,25 @@ require('lazy').setup({
         lualine_b = { 'filename', 'branch' },
         lualine_c = {
           '%=', --[[ add your center compoentnts here in place of this comment ]]
+          -- {
+          --   require('tmux-status').tmux_windows,
+          --   cond = require('tmux-status').show,
+          --   padding = { left = 3 },
+          -- },
         },
         lualine_x = {},
         lualine_y = { 'filetype', 'progress' },
         lualine_z = {
           { 'location', separator = { right = '' }, left_padding = 2 },
+          -- {
+          --   require('tmux-status').tmux_session,
+          --   cond = require('tmux-status').show,
+          --   padding = { left = 3 },
+          -- },
         },
       },
       inactive_sections = {
+
         lualine_a = { 'filename' },
         lualine_b = {},
         lualine_c = {},
@@ -192,6 +197,8 @@ require('lazy').setup({
 
   { 'akinsho/toggleterm.nvim', version = '*', config = true },
   { 'JoosepAlviste/nvim-ts-context-commentstring' },
+
+  { 'alexghergh/nvim-tmux-navigation' },
   -- {
   --   dir = '~/repos/personal/nuget-nvim',
   --   opts = {},
@@ -361,7 +368,7 @@ vim.keymap.set('n', '<leader>cq', vim.diagnostic.setloclist, { desc = 'Open diag
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
@@ -402,6 +409,12 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
+
+  -- if client.server_capabilities.inlayHintProvider then
+  --   vim.lsp.inlay_hint.enable(true, {
+  --     bufnr = bufnr,
+  --   })
+  -- end
 end
 
 -- Enable the following language servers
@@ -417,8 +430,12 @@ end
 local mason_registry = require 'mason-registry'
 local vue_language_server_path = mason_registry.get_package('vue-language-server'):get_install_path() .. '/node_modules/@vue/language-server'
 
+-- Ensure the servers above are installed
+local mason_lspconfig = require 'mason-lspconfig'
+local util = require 'lspconfig.util'
+
 local servers = {
-  tsserver = {
+  ts_ls = {
     filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
     init_options = {
       plugins = {
@@ -429,7 +446,12 @@ local servers = {
         },
       },
     },
+    -- root_dir = util.root_pattern 'package.json',
+    -- single_file_support = false,
   },
+  -- denols = {
+  --   root_dir = util.root_pattern('deno.json', 'deno.jsonc'),
+  -- },
   html = { filetypes = { 'html', 'twig', 'hbs' } },
   volar = {},
   astro = {},
@@ -485,9 +507,6 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 --   capabilities = capabilities,
 -- }
 
--- Ensure the servers above are installed
-local mason_lspconfig = require 'mason-lspconfig'
-
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
 }
@@ -528,15 +547,15 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
+    -- ['<Tab>'] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_next_item()
+    --   elseif luasnip.expand_or_locally_jumpable() then
+    --     luasnip.expand_or_jump()
+    --   else
+    --     fallback()
+    --   end
+    -- end, { 'i', 's' }),
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
@@ -548,12 +567,18 @@ cmp.setup {
     end, { 'i', 's' }),
   },
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
+    -- Copilot Source
+    { name = 'copilot', group_index = 2 },
+    -- Other Sources
+    { name = 'nvim_lsp', group_index = 2 },
+    { name = 'path', group_index = 2 },
+    { name = 'luasnip', group_index = 2 },
   },
   formatting = {
     format = require('lspkind').cmp_format {
       before = require('tailwind-tools.cmp').lspkind_format,
+      mode = 'symbol_text',
+      symbol_map = { Copilot = '' },
     },
   },
   view = {
@@ -581,18 +606,18 @@ vim.keymap.set('n', '<leader>sw', ':lua MiniSessions.select("write")<CR>', { des
 vim.keymap.set('n', '<leader>sd', ':lua MiniSessions.select("delete")<CR>', { desc = '[S]ession [D]elete' })
 vim.keymap.set('n', '<leader>sr', ':lua MiniSessions.select("read")<CR>', { desc = '[S]ession [R]ead' })
 
-vim.keymap.set('n', '<C-h>', '<C-w>h')
-vim.keymap.set('n', '<C-j>', '<C-w>j')
-vim.keymap.set('n', '<C-k>', '<C-w>k')
-vim.keymap.set('n', '<C-l>', '<C-w>l')
+-- vim.keymap.set('n', '<C-h>', '<C-w>h')
+-- vim.keymap.set('n', '<C-j>', '<C-w>j')
+-- vim.keymap.set('n', '<C-k>', '<C-w>k')
+-- vim.keymap.set('n', '<C-l>', '<C-w>l')
 
 function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
   vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-  vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
-  vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
-  vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
-  vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
+  -- vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
+  -- vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
+  -- vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
+  -- vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
   vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
 end
 
@@ -614,3 +639,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gd', require('csharp').go_to_definition, { silent = true, nowait = true, noremap = true, desc = 'Go to Definition', buffer = bufnr })
   end,
 })
+
+vim.keymap.set('n', 's', require('substitute').operator, { noremap = true })
+vim.keymap.set('n', 'ss', require('substitute').line, { noremap = true })
+vim.keymap.set('n', 'S', require('substitute').eol, { noremap = true })
+vim.keymap.set('x', 's', require('substitute').visual, { noremap = true })
