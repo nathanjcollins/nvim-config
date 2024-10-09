@@ -122,6 +122,7 @@ require('lazy').setup({
       'luckasRanarison/tailwind-tools.nvim',
       'onsails/lspkind-nvim',
     },
+    enabled = false,
   },
   {
     'christopher-francisco/tmux-status.nvim',
