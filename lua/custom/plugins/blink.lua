@@ -28,10 +28,12 @@ return {
     -- experimental signature help support
     trigger = { signature_help = { enabled = true } },
 
-    keymap = {
-      accept = '<CR>',
-      select_prev = { '<C-p>' },
-      select_next = { '<C-n>' },
-    },
+    keymap = 'default',
+
+    -- keymap = {
+    --   ['<CR>'] = { 'accept' },
+    --   ['<C-p>'] = { 'select_prev' },
+    --   ['<C-n>'] = { 'select_next' },
+    -- },
   },
 }

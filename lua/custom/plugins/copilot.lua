@@ -4,14 +4,17 @@ return {
     cmd = 'Copilot',
     event = 'InsertEnter',
     config = function()
-      require('copilot').setup { suggestion = { enabled = true }, panel = { enabled = false } }
+      require('copilot').setup {
+        suggestion = {
+          auto_trigger = true,
+        },
+      }
     end,
   },
-  {
-    'zbirenbaum/copilot-cmp',
-    config = function()
-      require('copilot_cmp').setup()
-    end,
-    enabled = false,
-  },
+  -- {
+  --   'zbirenbaum/copilot-cmp',
+  --   config = function()
+  --     require('copilot_cmp').setup()
+  --   end,
+  -- },
 }

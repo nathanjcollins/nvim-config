@@ -6,6 +6,11 @@ return {
       defaults = {
         formatter = 'path.filename_first',
         multiline = 2,
+        keymap = {
+          fzf = {
+            ['ctrl-q'] = 'select-all+accept',
+          },
+        },
       },
     }
   end,
