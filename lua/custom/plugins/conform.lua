@@ -3,9 +3,19 @@ return {
   config = function()
     require('conform').setup {
       formatters_by_ft = {
-        cs = { 'csharpier' },
+        cs = {
+          command = 'dotnet',
+          args = {'csharpier'},
+          cwd = require('conform.util').root_file { '.editorconfig' },
+          require_cwd = true,
+        },
         css = { 'prettierd' },
-        fsharp = { 'fantomas' },
+        fsharp = {
+          command = 'dotnet',
+          args = { 'fantomas' },
+          cwd = require('conform.util').root_file { '.editorconfig' },
+          require_cwd = true,
+        },
         javascript = { 'prettierd' },
         json = { 'prettierd' },
         lua = { 'stylua' },

@@ -1,17 +1,15 @@
 return {
   'f-person/auto-dark-mode.nvim',
   dependencies = {
-    { 'scottmckendry/cyberdream.nvim', opts = { transparent = true, theme = { variant = 'auto' } } },
+    { 'rebelot/kanagawa.nvim' },
   },
   config = {
     update_interval = 1000,
     set_dark_mode = function()
-      vim.cmd.colorscheme 'cyberdream'
-      -- vim.o.background = 'dark'
+      vim.cmd.colorscheme 'kanagawa-dragon'
     end,
     set_light_mode = function()
-      vim.cmd.colorscheme 'cyberdream'
-      -- vim.o.background = 'light'
+      vim.cmd.colorscheme 'kanagawa-dragon'
     end,
   },
 }

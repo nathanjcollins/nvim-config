@@ -192,7 +192,11 @@ require('lazy').setup({
       -- refer to the configuration section below
     },
   },
-  -- { 'jmederosalvarado/roslyn.nvim' },
+  {
+    'seblj/roslyn.nvim',
+    ft = 'cs',
+    opts = {},
+  },
   { 'sindrets/diffview.nvim' },
   -- { 'numToStr/Comment.nvim', opts = {} },
 
@@ -460,7 +464,6 @@ local servers = {
   cssls = {},
   eslint = {},
   fsautocomplete = {},
-
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -500,13 +503,6 @@ require('neodev').setup()
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 -- local capabilities = vim.lsp.protocol.make_client_capabilities()
 -- capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
--- require('roslyn').setup {
---   dotnet_cmd = 'dotnet', -- this is the default
---   roslyn_version = '4.8.0-3.23475.7', -- this is the default
---   on_attach = on_attach,
---   capabilities = capabilities,
--- }
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
@@ -599,7 +595,8 @@ vim.keymap.set('n', '<leader>gg', '<Cmd>LazyGit<CR>', { desc = 'Show LazyGit' })
 vim.keymap.set('n', '<leader>l', '<Cmd>Lazy<CR>', { desc = 'Show Lazy' })
 vim.keymap.set('n', 'H', '<Cmd>bnext<CR>')
 vim.keymap.set('n', 'L', '<Cmd>bprev<CR>')
-vim.keymap.set('n', '<leader>q', '<Cmd>bdelete<CR>', { desc = 'Close Current Buffer' })
+vim.keymap.set('n', '<leader>q', '<Cmd>bd<CR>', { desc = 'Close Current Buffer' })
+vim.keymap.set('n', '<leader>Q', '<Cmd>%bd|e#<CR>', { desc = 'Close Current Buffer' })
 vim.keymap.set('n', '<leader>t1', [[<Cmd>ToggleTerm 1 direction='vertical' size=40<CR>]], { desc = 'Open Terminal 1' })
 vim.keymap.set('n', '<leader>t2', [[<Cmd>ToggleTerm 2 direction='vertical' size=40<CR>]], { desc = 'Open Terminal 2' })
 vim.keymap.set('n', '<leader>sw', ':lua MiniSessions.select("write")<CR>', { desc = '[S]ession [W]rite' })
@@ -632,11 +629,44 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local bufnr = args.buf
     local client = vim.lsp.get_client_by_id(args.data.client_id)
 
-    if client.name ~= 'omnisharp' then
+    if client.name ~= 'roslyn' then
       return
     end
 
-    vim.keymap.set('n', 'gd', require('csharp').go_to_definition, { silent = true, nowait = true, noremap = true, desc = 'Go to Definition', buffer = bufnr })
+    local nmap = function(keys, func, desc)
+      if desc then
+        desc = 'LSP: ' .. desc
+      end
+
+      vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+    end
+
+    nmap('<leader>cr', vim.lsp.buf.rename, '[C]ode [R]ename')
+    nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+
+    nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+    nmap('gr', require('fzf-lua').lsp_references, '[G]oto [R]eferences')
+    nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+    nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
+    nmap('<leader>ds', require('fzf-lua').lsp_document_symbols, '[D]ocument [S]ymbols')
+    nmap('<leader>ws', require('fzf-lua').lsp_live_workspace_symbols, '[W]orkspace [S]ymbols')
+
+    -- See `:help K` for why this keymap
+    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+    -- nmap('<leader>k', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+    -- Lesser used LSP functionality
+    nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+    nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+    nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+    nmap('<leader>wl', function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, '[W]orkspace [L]ist Folders')
+
+    -- Create a command `:Format` local to the LSP buffer
+    vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+      vim.lsp.buf.format()
+    end, { desc = 'Format current buffer with LSP' })
   end,
 })
 
@@ -644,3 +674,5 @@ vim.keymap.set('n', 's', require('substitute').operator, { noremap = true })
 vim.keymap.set('n', 'ss', require('substitute').line, { noremap = true })
 vim.keymap.set('n', 'S', require('substitute').eol, { noremap = true })
 vim.keymap.set('x', 's', require('substitute').visual, { noremap = true })
+
+require('lspconfig').gleam.setup {}
