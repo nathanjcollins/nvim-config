@@ -70,6 +70,19 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+vim.opt.winborder = 'rounded'
+
+vim.diagnostic.config({
+  -- Use the default configuration
+  virtual_lines = true
+
+  -- Alternatively, customize specific options
+  -- virtual_lines = {
+  --  -- Only show virtual line diagnostics for the current cursor line
+  --  current_line = true,
+  -- },
+})
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
