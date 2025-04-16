@@ -1,5 +1,5 @@
 return {
-  cmd = { 'fsautocomplete', '--adaptive-lsp-server-enabled' },
+  cmd = { 'dotnet', 'tool', 'run', 'fsautocomplete', '--adaptive-lsp-server-enabled' },
   filetypes = { 'fsharp' },
   root_markers = { '*.sln', '*.fsproj', '.git' },
   init_options = {

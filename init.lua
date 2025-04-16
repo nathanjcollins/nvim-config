@@ -78,8 +78,8 @@ vim.diagnostic.config({
 
   -- Alternatively, customize specific options
   -- virtual_lines = {
-  --  -- Only show virtual line diagnostics for the current cursor line
-  --  current_line = true,
+  --   -- Only show virtual line diagnostics for the current cursor line
+  --   current_line = true,
   -- },
 })
 
@@ -301,18 +301,33 @@ require('lazy').setup({
       }
     end,
   },
+  -- {
+  --   'f-person/auto-dark-mode.nvim',
+  --   dependencies = {
+  --     { 'rebelot/kanagawa.nvim' },
+  --   },
+  --   config = {
+  --     update_interval = 1000,
+  --     set_dark_mode = function()
+  --       vim.cmd.colorscheme 'kanagawa-dragon'
+  --     end,
+  --     set_light_mode = function()
+  --       vim.cmd.colorscheme 'kanagawa-lotus'
+  --     end,
+  --   },
+  -- },
   {
     'f-person/auto-dark-mode.nvim',
     dependencies = {
-      { 'rebelot/kanagawa.nvim' },
+      { 'embark-theme/vim' },
     },
     config = {
       update_interval = 1000,
       set_dark_mode = function()
-        vim.cmd.colorscheme 'kanagawa-dragon'
+        vim.cmd.colorscheme 'embark'
       end,
       set_light_mode = function()
-        vim.cmd.colorscheme 'kanagawa-lotus'
+        vim.cmd.colorscheme 'embark'
       end,
     },
   },
@@ -381,6 +396,7 @@ vim.lsp.enable('fsautocomplete')
 vim.lsp.enable('svelte')
 -- vim.lsp.enable('deno')
 vim.lsp.enable('gleam')
+vim.lsp.enable('tailwindcss')
 
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 vim.keymap.set('n', 'gr', require('fzf-lua').lsp_references, { desc = '[G]oto [R]eferences' })
@@ -389,3 +405,5 @@ vim.keymap.set('n', '<leader>ws', require('fzf-lua').lsp_live_workspace_symbols,
 vim.keymap.set('n', '<leader>f', require('fzf-lua').files, { desc = 'Search [F]iles' })
 vim.keymap.set('n', '<leader>sg', require('fzf-lua').live_grep, { desc = '[S]earch [G]rep Files' })
 vim.keymap.set('n', '<leader><leader>', require('fzf-lua').buffers, { desc = 'Search Buffers' })
+
+vim.opt.termguicolors = true
