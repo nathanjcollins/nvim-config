@@ -70,7 +70,7 @@ return {
     'javascript.jsx',
     'typescript',
     'typescriptreact',
-    'typescript.tsx',
+    'typescript.tsx'
   },
   root_markers = { 'deno.json', 'deno.jsonc', '.git' },
   settings = {

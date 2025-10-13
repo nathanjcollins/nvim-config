@@ -72,6 +72,8 @@ vim.opt.scrolloff = 10
 
 vim.opt.winborder = 'rounded'
 
+vim.opt.conceallevel = 1
+
 vim.diagnostic.config({
   -- Use the default configuration
   virtual_lines = true
